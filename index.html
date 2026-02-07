@@ -1,231 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Valentine?</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Valentine</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      text-align: center;
-    }
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      width: 360px;
-      max-width: 90%;
-      position: relative;
-      z-index: 2;
-    }
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  z-index: 2;
+}
 
-    h1 {
-      color: #ff4d6d;
-      font-size: 22px;
-    }
+h1 {
+  color: #ff4d6d;
+  font-size: 22px;
+}
 
-    #timer {
-      font-size: 14px;
-      color: #555;
-      margin-top: 5px;
-    }
+img {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 15px;
+  margin: 15px 0;
+}
 
-    img {
-      width: 100%;
-      max-width: 260px;
-      border-radius: 15px;
-      margin: 15px 0;
-    }
+.buttons {
+  position: relative;
+  height: 90px;
+}
 
-    .buttons {
-      position: relative;
-      height: 90px;
-    }
+button {
+  padding: 12px 22px;
+  border-radius: 25px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  position: absolute;
+}
 
-    button {
-      padding: 12px 22px;
-      border: none;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      position: absolute;
-    }
+.yes {
+  background: #ff4d6d;
+  color: white;
+  left: 20px;
+  bottom: 10px;
+}
 
-    .yes {
-      background-color: #ff4d6d;
-      color: white;
-      left: 20px;
-      bottom: 10px;
-    }
+.no {
+  background: #ddd;
+  right: 20px;
+  bottom: 10px;
+}
 
-    .no {
-      background-color: #ddd;
-      right: 20px;
-      bottom: 10px;
-    }
+/* Floating hearts */
+.heart {
+  position: absolute;
+  bottom: -20px;
+  font-size: 22px;
+  animation: float 5s linear infinite;
+}
 
-    .home {
-      background-color: #444;
-      color: white;
-      position: static;
-      margin-top: 10px;
-      display: none;
-    }
-
-    .share {
-      background-color: #25d366;
-      color: white;
-      position: static;
-      margin-top: 10px;
-    }
-
-    /* Hearts */
-    .heart {
-      position: absolute;
-      bottom: -20px;
-      font-size: 20px;
-      animation: floatUp linear infinite;
-    }
-
-    @keyframes floatUp {
-      from { transform: translateY(0); opacity: 1; }
-      to { transform: translateY(-120vh); opacity: 0; }
-    }
-
-    /* Confetti */
-    .confetti {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      animation: fall 3s linear infinite;
-    }
-
-    @keyframes fall {
-      to { transform: translateY(100vh) rotate(360deg); }
-    }
-  </style>
+@keyframes float {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-120vh); opacity: 0; }
+}
+</style>
 </head>
 
 <body>
 
 <div class="card">
   <h1 id="title">Hey Shivran, will you be my Valentine? 💘</h1>
-  <div id="timer">Deciding time left: <span id="countdown">10</span>s</div>
 
   <img id="image"
-    src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" />
+    src="https://media.giphy.com/media/3oz8xKaR836UJOYeOc/giphy.gif"
+    alt="love gif">
 
   <div class="buttons">
     <button class="yes" onclick="yesClick()">Yes ❤️</button>
     <button class="no" id="noBtn">No ❌</button>
   </div>
-
-  <button class="home" id="homeBtn" onclick="goHome()">🏠 Home</button>
-  <button class="share" onclick="sharePage()">📤 Share</button>
 </div>
 
-<!-- Sounds -->
-<audio id="yesSound" src="https://www.soundjay.com/human/applause-8.mp3"></audio>
-<audio id="noSound" src="https://www.soundjay.com/button/sounds/button-10.mp3"></audio>
+<!-- Romantic song (local file) -->
+<audio id="song" src="sab-tera.mp3" preload="auto"></audio>
 
 <script>
-  const noBtn = document.getElementById("noBtn");
-  const homeBtn = document.getElementById("homeBtn");
-  const yesSound = document.getElementById("yesSound");
-  const noSound = document.getElementById("noSound");
-  let noCount = 0;
+const noBtn = document.getElementById("noBtn");
+let noCount = 0;
 
-  // Evil No button
-  noBtn.addEventListener("mouseover", moveNo);
-  noBtn.addEventListener("touchstart", moveNo);
+// Moving NO button
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
 
-  function moveNo() {
-    noSound.play();
-    noCount++;
-    homeBtn.style.display = "block";
+function moveNo() {
+  noCount++;
+  const x = Math.random() * 200 - 100;
+  const y = Math.random() * 200 - 100;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
 
-    if (noCount >= 5) {
-      yesClick();
-      return;
-    }
-
-    const x = Math.random() * 200 - 100;
-    const y = Math.random() * 200 - 100;
-    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+  if (noCount >= 4) {
+    yesClick();
   }
+}
 
-  function yesClick() {
-    yesSound.play();
-    document.getElementById("title").innerText =
-      "YAY! 💖 Happy Valentine’s Day!";
-    document.getElementById("image").src =
-      "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif";
-    startConfetti();
+function yesClick() {
+  document.getElementById("title").innerText =
+    "I love you my baby ❤️";
+  document.getElementById("image").src =
+    "https://media.giphy.com/media/l4FGpPki5v2Bcd6Ss/giphy.gif";
+
+  // Play song (mobile-safe because triggered by click)
+  const song = document.getElementById("song");
+  song.volume = 0.8;
+  song.play();
+
+  startConfetti();
+}
+
+// Hearts
+function createHeart() {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerText = "❤️";
+  h.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 5000);
+}
+setInterval(createHeart, 400);
+
+// Confetti
+function startConfetti() {
+  for (let i = 0; i < 70; i++) {
+    const c = document.createElement("div");
+    c.style.position = "absolute";
+    c.style.width = "8px";
+    c.style.height = "8px";
+    c.style.background =
+      `hsl(${Math.random()*360},100%,50%)`;
+    c.style.left = Math.random()*100 + "vw";
+    c.style.top = "-10px";
+    c.style.animation =
+      "fall 3s linear infinite";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
   }
-
-  function goHome() {
-    location.reload();
-  }
-
-  // Hearts
-  function createHeart() {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.innerText = "❤️";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.animationDuration = 3 + Math.random() * 3 + "s";
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 6000);
-  }
-  setInterval(createHeart, 400);
-
-  // Countdown
-  let time = 10;
-  const countdownEl = document.getElementById("countdown");
-  const timer = setInterval(() => {
-    time--;
-    countdownEl.innerText = time;
-    if (time === 0) {
-      clearInterval(timer);
-      yesClick();
-    }
-  }, 1000);
-
-  // Confetti
-  function startConfetti() {
-    for (let i = 0; i < 80; i++) {
-      const c = document.createElement("div");
-      c.className = "confetti";
-      c.style.left = Math.random() * 100 + "vw";
-      c.style.background =
-        `hsl(${Math.random() * 360},100%,50%)`;
-      c.style.animationDuration = 2 + Math.random() * 3 + "s";
-      document.body.appendChild(c);
-      setTimeout(() => c.remove(), 4000);
-    }
-  }
-
-  // Share
-  function sharePage() {
-    navigator.share
-      ? navigator.share({
-          title: "Valentine 💘",
-          text: "Answer carefully 😏",
-          url: window.location.href
-        })
-      : alert("Copy the link and share 💕");
-  }
+}
 </script>
+
+<style>
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(360deg); }
+}
+</style>
 
 </body>
 </html>
