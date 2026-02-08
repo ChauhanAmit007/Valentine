@@ -33,19 +33,6 @@ h1 {
   font-size: 22px;
 }
 
-/* Pulsing heart instead of clock */
-.heart-pulse {
-  font-size: 28px;
-  animation: pulse 1.5s infinite;
-  margin-top: 5px;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3); }
-  100% { transform: scale(1); }
-}
-
 img {
   width: 100%;
   max-width: 260px;
@@ -53,11 +40,10 @@ img {
   margin: 15px 0;
 }
 
-/* Small romantic gif */
-.small-gif {
-  width: 100px;
-  border-radius: 10px;
-  margin-top: 10px;
+/* Heart GIF instead of clock */
+.heart-gif {
+  width: 90px;
+  margin: 10px auto;
 }
 
 .buttons {
@@ -111,17 +97,16 @@ button {
 
 <div class="card">
   <h1 id="title">Hey Shivran, will you be my Valentine? 💘</h1>
-  <div class="heart-pulse">❤️</div>
 
-  <!-- Main romantic couple GIF -->
+  <!-- Heart GIF (replaced clock) -->
+  <img class="heart-gif"
+    src="https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif"
+    alt="heart gif">
+
+  <!-- Romantic couple GIF -->
   <img id="image"
     src="https://media.giphy.com/media/1hqb8LwPS2xCNCpWH8/giphy.gif"
-    alt="romantic couple gif">
-
-  <!-- Extra small romantic gif -->
-  <img class="small-gif"
-    src="https://media.giphy.com/media/26FLdmIp6wJr91JAI/giphy.gif"
-    alt="romantic moment">
+    alt="love gif">
 
   <div class="buttons">
     <button class="yes" onclick="yesClick()">Yes ❤️</button>
@@ -129,14 +114,13 @@ button {
   </div>
 </div>
 
-<!-- Romantic song (local file) -->
+<!-- Romantic song -->
 <audio id="song" src="song.mp3" preload="auto"></audio>
 
 <script>
 const noBtn = document.getElementById("noBtn");
 let noCount = 0;
 
-// Moving NO button
 noBtn.addEventListener("mouseover", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 
